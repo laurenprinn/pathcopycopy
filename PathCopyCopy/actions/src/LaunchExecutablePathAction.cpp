@@ -110,7 +110,7 @@ namespace PCC
             }
 
             // Need reinterpret_cast here because of legacy Win32 API
-            [[gsl::suppress(type.1)]]
+            [[gsl::suppress("type.1")]]
             {
                 const auto res = reinterpret_cast<size_t>(::ShellExecuteW(p_hWnd,
                                                                           nullptr,
