@@ -1151,7 +1151,7 @@ namespace PCC
             g_DebugIsRevising = true;
         }
         struct ResetIsRevising {
-            [[gsl::suppress(c.21)]] // No use defining everything, this is a helper
+            [[gsl::suppress("c.21")]] // No use defining everything, this is a helper
             ~ResetIsRevising() noexcept(false) {
                 std::lock_guard<std::mutex> debugLock(g_DebugRecursiveCheckMutex);
                 assert(g_DebugIsRevising);

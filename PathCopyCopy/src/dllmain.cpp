@@ -44,6 +44,7 @@ EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 //
 // Constructor.
 //
+#pragma warning(suppress: 26455) // Constructor allocates std::wstring and may throw; noexcept not appropriate.
 CPathCopyCopyModule::CPathCopyCopyModule()
     : ATL::CAtlDllModuleT<CPathCopyCopyModule>()
 {
@@ -75,6 +76,7 @@ CPathCopyCopyModule::CPathCopyCopyModule()
 //
 // Destructor.
 //
+#pragma warning(suppress: 26432) // ATL module type; special members intentionally left defaulted.
 CPathCopyCopyModule::~CPathCopyCopyModule()
 {
     // If resource DLL was successfully loaded, free it here.
@@ -92,7 +94,7 @@ CPathCopyCopyModule::~CPathCopyCopyModule()
 // @param p_RegisterTypeLib Whether to register type libraries.
 // @return Result code.
 //
-[[gsl::suppress(c.128)]]
+[[gsl::suppress("c.128")]]
 HRESULT CPathCopyCopyModule::DllRegisterServer(BOOL p_RegisterTypeLib /*= TRUE*/) throw()
 {
     try {
@@ -135,7 +137,7 @@ HRESULT CPathCopyCopyModule::DllRegisterServer(BOOL p_RegisterTypeLib /*= TRUE*/
 // @param p_UnregisterTypeLib Whether to unregister type libraries.
 // @return Result code.
 //
-[[gsl::suppress(c.128)]]
+[[gsl::suppress("c.128")]]
 HRESULT CPathCopyCopyModule::DllUnregisterServer(BOOL p_UnregisterTypeLib /*= TRUE*/) throw()
 {
     try {

@@ -49,7 +49,7 @@ namespace {
 
 const wchar_t* const DEFAULT_PATHS_SEPARATOR = L"\r\n"; // Default separator used between paths when copying multiple file names.
 
-const int32_t DEFAULT_ICON_SIZE = 16;                   // Default width & height for loaded icons.
+constexpr int32_t DEFAULT_ICON_SIZE = 16;                   // Default width & height for loaded icons.
 
 }
 
@@ -108,7 +108,7 @@ CPathCopyCopyContextMenuExt::~CPathCopyCopyContextMenuExt()
 // @param p_CLSID ID of plugin COM class.
 // @return S_OK if successful, S_FALSE if the plugin was already registered, otherwise an error code.
 //
-[[gsl::suppress(c.128)]]
+[[gsl::suppress("c.128")]]
 STDMETHODIMP CPathCopyCopyContextMenuExt::RegisterPlugin(
     REFCLSID p_CLSID)
 {
@@ -132,7 +132,7 @@ STDMETHODIMP CPathCopyCopyContextMenuExt::RegisterPlugin(
 // @param p_pCLSID ID of plugin COM class, as a string.
 // @return S_OK if successful, S_FALSE if the component was not registered, otherwise an error code.
 //
-[[gsl::suppress(c.128)]]
+[[gsl::suppress("c.128")]]
 STDMETHODIMP CPathCopyCopyContextMenuExt::UnregisterPlugin(
     REFCLSID p_CLSID)
 {
@@ -161,7 +161,7 @@ STDMETHODIMP CPathCopyCopyContextMenuExt::UnregisterPlugin(
 // @param p_User Whether to register the plugin per-user (VARIANT_TRUE) or per-machine (VARIANT_FALSE).
 // @return S_OK if successful, S_FALSE if the plugin was already registered, otherwise an error code.
 //
-[[gsl::suppress(c.128)]]
+[[gsl::suppress("c.128")]]
 STDMETHODIMP CPathCopyCopyContextMenuExt::RegisterPlugin2(
     REFCLSID p_CLSID,
     VARIANT_BOOL p_User)
@@ -188,7 +188,7 @@ STDMETHODIMP CPathCopyCopyContextMenuExt::RegisterPlugin2(
 // @param p_User Whether the plugin was registered per-user (VARIANT_TRUE) or per-machine (VARIANT_FALSE).
 // @return S_OK if successful, S_FALSE if the component was not registered, otherwise an error code.
 //
-[[gsl::suppress(c.128)]]
+[[gsl::suppress("c.128")]]
 STDMETHODIMP CPathCopyCopyContextMenuExt::UnregisterPlugin2(
     REFCLSID p_CLSID,
     VARIANT_BOOL p_User)
@@ -218,7 +218,7 @@ STDMETHODIMP CPathCopyCopyContextMenuExt::UnregisterPlugin2(
 // @param p_hKeyFileClass Handle to file class key; unused.
 // @return S_OK if successful, otherwise an error code.
 //
-[[gsl::suppress(c.128)]]
+[[gsl::suppress("c.128")]]
 STDMETHODIMP CPathCopyCopyContextMenuExt::Initialize(
     PCIDLIST_ABSOLUTE p_pFolderPIDL,
     IDataObject *p_pDataObject,
@@ -243,7 +243,7 @@ STDMETHODIMP CPathCopyCopyContextMenuExt::Initialize(
                     // Get each file in turn.
                     for (UINT i = 0; i < fileCount; ++i) {
                         const auto bufferSize = ::DragQueryFileW(static_cast<HDROP>(stgMedium.Get().hGlobal), i, nullptr, 0);
-                        std::wstring buffer(bufferSize + 1, L'\0');
+                        std::wstring buffer(static_cast<size_t>(bufferSize) + 1, L'\0');
                         ::DragQueryFileW(static_cast<HDROP>(stgMedium.Get().hGlobal), i, &*buffer.begin(), gsl::narrow<UINT>(buffer.size()));
                         m_vFiles.emplace_back(buffer.c_str());
                     }
@@ -294,7 +294,7 @@ STDMETHODIMP CPathCopyCopyContextMenuExt::Initialize(
 // @return If successful, a success code with code value set to the largest command ID
 //         used, plus one; otherwise, an error code.
 //
-[[gsl::suppress(c.128)]]
+[[gsl::suppress("c.128")]]
 STDMETHODIMP CPathCopyCopyContextMenuExt::QueryContextMenu(
     HMENU p_hMenu,
     UINT p_Index,
@@ -411,6 +411,7 @@ STDMETHODIMP CPathCopyCopyContextMenuExt::QueryContextMenu(
                     try {
                         // Fetch list of plugins to display in the submenu.
                         PCC::PluginSPV vspPlugins;
+#pragma warning(suppress: 26429) // Raw pointer is an optional alias; gsl::not_null is not applicable.
                         const PCC::PluginSPV* pvspPlugins = nullptr;
                         vPluginIds.clear();
                         rSettings.GetSubmenuPluginDisplayOrder(vPluginIds);
@@ -534,7 +535,7 @@ STDMETHODIMP CPathCopyCopyContextMenuExt::QueryContextMenu(
 // @param p_pCommandInfo Pointer to struct containing command information.
 // @return S_OK if successful, otherwise an error code.
 //
-[[gsl::suppress(c.128)]]
+[[gsl::suppress("c.128")]]
 STDMETHODIMP CPathCopyCopyContextMenuExt::InvokeCommand(
     CMINVOKECOMMANDINFO* p_pCommandInfo)
 {
@@ -598,7 +599,7 @@ STDMETHODIMP CPathCopyCopyContextMenuExt::InvokeCommand(
 // @param p_BufferSize Max size of p_pBuffer, in characters.
 // @return S_OK if successful, otherwise an error code.
 //
-[[gsl::suppress(c.128)]]
+[[gsl::suppress("c.128")]]
 STDMETHODIMP CPathCopyCopyContextMenuExt::GetCommandString(
     UINT_PTR p_CmdId,
     UINT p_Flags,
@@ -830,6 +831,8 @@ HRESULT CPathCopyCopyContextMenuExt::AddPluginToMenu(const PCC::PluginSP& p_spPl
 
                     // In some language, this will leave the first letter in lowercase.
                     // Convert it to uppercase in that case.
+#pragma warning(push)
+#pragma warning(disable: 26446) // Subscripts below are guarded by the preceding size/empty checks.
                     if (!description.empty() && ::iswlower(description[0])) {
                         description[0] = ::towupper(description[0]);
                     }
@@ -838,6 +841,7 @@ HRESULT CPathCopyCopyContextMenuExt::AddPluginToMenu(const PCC::PluginSP& p_spPl
                     if (description.size() >= 2 && description[0] == L'&' && ::iswlower(description[1])) {
                         description[1] = ::towupper(description[1]);
                     }
+#pragma warning(pop)
                 }
             }
             if (p_ComputeShortcut) {
@@ -1030,6 +1034,7 @@ HBITMAP CPathCopyCopyContextMenuExt::GetIconForIconFile(const std::wstring& p_Ic
                 StGdiplusStartup gdiPlusStartup;
                 if (gdiPlusStartup.Started()) {
                     // Load original bitmap using GDI+.
+#pragma warning(suppress: 26414) // Local smart pointer owns a single scoped resource by design.
                     std::shared_ptr<Gdiplus::Bitmap> spFileBitmap(Gdiplus::Bitmap::FromStream(cpIconFileStream, FALSE));
 
                     // If necessary, rescale bitmap to fit.
@@ -1178,7 +1183,7 @@ PCC::FilesV CPathCopyCopyContextMenuExt::GetFilesToActOn(const bool p_Recursivel
             PCC::FilesV vFilesToScan;
             vFilesToScan.swap(vNewFiles);
             for (const auto& fileToScan : vFilesToScan) {
-                auto attributes = ::GetFileAttributesW(fileToScan.c_str());
+                const auto attributes = ::GetFileAttributesW(fileToScan.c_str());
                 if (attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_DIRECTORY) != 0) {
                     WIN32_FIND_DATAW findData;
                     HANDLE hFind = ::FindFirstFileW((fileToScan + L"\\*").c_str(), &findData);

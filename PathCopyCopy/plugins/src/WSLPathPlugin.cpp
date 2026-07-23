@@ -79,7 +79,7 @@ namespace PCC
 
             // Check if the file begins with a drive letter. If so,
             // remove the drive letter and replace it with /mnt/letter.
-            [[gsl::suppress(type.4)]] // Compiler considers foo{bar} to be a C-style cast
+            [[gsl::suppress("type.4")]] // Compiler considers foo{bar} to be a C-style cast
             if (path.size() >= 3 && path.at(1) == L':') {
                 std::wstringstream newPathSS;
                 newPathSS << wslPathPrefix << L'/'              // The WSL path prefix

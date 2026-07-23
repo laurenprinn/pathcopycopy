@@ -178,6 +178,7 @@ namespace PCC
             case ELEMENT_CODE_DUPLICATE_STACK_VALUE: {
                 spElement = std::make_shared<DuplicateStackValuePipelineElement>();
             }
+#pragma warning(suppress: 26819) // NOTE: 'DUPLICATE_STACK_VALUE' case above has no 'break'; suppressing to preserve existing behavior.
             case ELEMENT_CODE_PATHS_SEPARATOR: {
                 spElement = DecodePathsSeparatorElement(p_rStream);
                 break;
