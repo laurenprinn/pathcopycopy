@@ -39,7 +39,7 @@ HINSTANCE g_hInstance = nullptr;
 CTestPluginsModule _AtlModule;
 
 // Registers our COM object. Let's use the opportunity to register our plugins.
-[[gsl::suppress(c.128)]]
+[[gsl::suppress("c.128")]]
 HRESULT CTestPluginsModule::DllRegisterServer(BOOL bRegTypeLib /*= TRUE*/) throw()
 {
     // Create PathCopyCopy registration object and check if it supports per-user install.
@@ -90,7 +90,7 @@ HRESULT CTestPluginsModule::DllRegisterServer(BOOL bRegTypeLib /*= TRUE*/) throw
 }
 
 // Unregisters our COM object. We will also remove our plugins from Path Copy Copy.
-[[gsl::suppress(c.128)]]
+[[gsl::suppress("c.128")]]
 HRESULT CTestPluginsModule::DllUnregisterServer(BOOL bUnRegTypeLib /*= TRUE*/) throw()
 {
     // Setup per-user unregistration.

@@ -139,7 +139,7 @@ namespace PCC
     class InvalidPipelineException : public std::runtime_error
     {
     public:
-                        [[gsl::suppress(f.6)]]
+                        [[gsl::suppress("f.6")]]
                         InvalidPipelineException();
         explicit        InvalidPipelineException(const char* p_pWhat);
     };

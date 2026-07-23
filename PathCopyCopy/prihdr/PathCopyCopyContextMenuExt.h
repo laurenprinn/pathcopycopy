@@ -84,13 +84,13 @@ public:
 
 #pragma warning(pop)
 
-    [[gsl::suppress(c.128)]]
+    [[gsl::suppress("c.128")]]
     HRESULT FinalConstruct() noexcept
     {
         return S_OK;
     }
 
-    [[gsl::suppress(c.128)]]
+    [[gsl::suppress("c.128")]]
     void FinalRelease() noexcept
     {
     }

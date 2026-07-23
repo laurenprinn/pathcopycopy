@@ -335,6 +335,7 @@ namespace PCC
     // @param p_NumParts Number of path parts to copy.
     // @param p_First Whether to copy the first (true) or last (false) path parts.
     //
+#pragma warning(suppress: 26440) // Constructor does not throw; noexcept intentionally omitted for ABI stability.
     CopyNPathPartsPipelineElement::CopyNPathPartsPipelineElement(const size_t p_NumParts,
                                                                  const bool p_First)
         : m_NumParts(p_NumParts),
@@ -358,6 +359,7 @@ namespace PCC
         if (m_NumParts < vPathParts.size()) {
             // Try auto-detecting the separator type used in this path.
             const auto separatorPos = p_rPath.find_first_of(L"\\/");
+#pragma warning(suppress: 26446) // Subscript guarded by the preceding npos check.
             const auto separator = separatorPos != std::wstring::npos ? p_rPath[separatorPos] : L'\\';
 
             // Keep only the required number of path parts and join them using separator.
@@ -474,7 +476,7 @@ namespace PCC
     //                          collision means a loop is detected and
     //                          pipeline element is invalid.
     //
-    [[gsl::suppress(f.23)]]
+    [[gsl::suppress("f.23")]]
     void ApplyPipelinePluginPipelineElement::Validate(const PluginProvider* const p_pPluginProvider,
                                                       GUIDS& p_rsSeenPluginIds) const
     {
@@ -493,6 +495,7 @@ namespace PCC
     // Default constructor. The element will push the entire path
     // to the stack.
     //
+#pragma warning(suppress: 26455) // Default constructor does not throw; noexcept intentionally omitted for ABI stability.
     PushToStackPipelineElement::PushToStackPipelineElement()
         : m_Method(PushToStackMethod::Entire)
     {
@@ -505,6 +508,7 @@ namespace PCC
     // @param p_Begin Index of start of range to push to the stack (inclusive).
     // @param p_End Index of end of range to push to the stack (exclusive).
     //
+#pragma warning(suppress: 26440) // Constructor does not throw; noexcept intentionally omitted for ABI stability.
     PushToStackPipelineElement::PushToStackPipelineElement(const size_t p_Begin,
                                                            const size_t p_End)
         : m_Method(PushToStackMethod::Range),
@@ -594,6 +598,7 @@ namespace PCC
 
                         std::wsmatch match;
                         if (std::regex_search(p_Path, match, regex)) {
+#pragma warning(suppress: 26446) // Match result access is validated by the preceding regex_search success.
                             part = match[m_Group];
                         }
                     }
@@ -617,6 +622,7 @@ namespace PCC
     //
     // @param p_Location Location where to store popped value.
     //
+#pragma warning(suppress: 26440) // Constructor does not throw; noexcept intentionally omitted for ABI stability.
     PopFromStackPipelineElement::PopFromStackPipelineElement(const PopFromStackLocation p_Location)
         : m_Location(p_Location)
     {
@@ -629,6 +635,7 @@ namespace PCC
     // @param p_Begin Start of range to replace with the popped value.
     // @param p_End End of range to replace with the popped value.
     //
+#pragma warning(suppress: 26440) // Constructor does not throw; noexcept intentionally omitted for ABI stability.
     PopFromStackPipelineElement::PopFromStackPipelineElement(const size_t p_Begin,
                                                              const size_t p_End)
         : m_Location(PopFromStackLocation::Range),
@@ -803,6 +810,7 @@ namespace PCC
     //
     // @param p_rOptions Global options to modify (in-place).
     //
+#pragma warning(suppress: 26440) // Overridden virtual does not throw; noexcept intentionally omitted for ABI stability.
     void RecursiveCopyPipelineElement::ModifyOptions(PipelineOptions& p_rOptions) const
     {
         p_rOptions.SetCopyPathsRecursively(true);
@@ -901,6 +909,7 @@ namespace PCC
     // @param p_ShowForFiles Whether to display the plugin when files are selected.
     // @param p_ShowForFolders Whether to display the plugin when folders are selected.
     //
+#pragma warning(suppress: 26440) // Constructor does not throw; noexcept intentionally omitted for ABI stability.
     DisplayForSelectionPipelineElement::DisplayForSelectionPipelineElement(const bool p_ShowForFiles,
                                                                            const bool p_ShowForFolders)
         : m_ShowForFiles(p_ShowForFiles),
@@ -914,6 +923,7 @@ namespace PCC
     //
     // @param p_rOptions Global options to modify.
     //
+#pragma warning(suppress: 26440) // Overridden virtual does not throw; noexcept intentionally omitted for ABI stability.
     void DisplayForSelectionPipelineElement::ModifyOptions(PipelineOptions& p_rOptions) const
     {
         p_rOptions.SetShowForFiles(m_ShowForFiles);

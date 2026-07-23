@@ -45,4 +45,10 @@
 // Including this header allows us to suppress C++ Core Guideline warnings more easily
 #include <CppCoreCheck\warnings.h>
 
+// The vendored Microsoft.GSL headers use the deprecated unquoted [[gsl::suppress("tag")]]
+// form, which triggers C4875. Suppress it only around the vendored include so first-party
+// C4875 diagnostics are still reported.
+#pragma warning(push)
+#pragma warning(disable: 4875)
 #include <gsl/gsl>
+#pragma warning(pop)
